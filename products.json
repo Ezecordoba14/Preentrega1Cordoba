@@ -1,1 +1,62 @@
-[{"id":"1","name":"Yerba","description":"YERBA CON PALO X 1 KG","code":"464220","price":"5100","status":true,"stock":"6","category":"Almacen"},{"id":"2","name":"Galletitas","description":"Galletitas base chocolate y relleno de crema","code":"503405","price":"2500","status":true,"stock":"3","category":"Alimento"},{"id":"3","name":"Azucar","description":"Yerba para mate con palo","code":"YrbMt","price":"5500","status":true,"stock":"16","category":"Almacen"},{"id":"4","name":"Fideos Tallarín","description":"FIDEOS TALLARIN LARGO X 500 GR","code":"503609","price":"560","status":true,"stock":"7","category":"Almacen"},{"id":"5","name":"Gaseosa","description":"Gaseosa Cola Black  1,5 Lt","code":"410158","price":"1700","status":true,"stock":"9","category":"Bebidas"},{"id":"6","name":"Queso","description":"QUESO RALLADO BOLSA 35 GR","code":"472071","price":"1400","status":true,"stock":"2","category":"Quesos"},{"id":"7","name":"Jamoarsfdfsdsadsdasn","description":"QUESO RALLADO BOLSA 35 GR","code":"","price":"","status":true,"stock":"2","category":"Jamon"},{"id":"8","name":"Jamoarsfdfsdsadsdasn","description":"QUESO RALLADO BOLSA 35 GR","code":"","price":"","status":true,"stock":"2","category":"Jamon"}]
+[
+    {
+        "id":"1",
+        "name":"Yerba",
+        "description":"YERBA CON PALO X 1 KG",
+        "code":"464220",
+        "price":"5100",
+        "status":true,
+        "stock": "6",
+        "category":"Almacen"
+    },
+    {
+        "id":"2",
+        "name":"Galletitas",
+        "description":"Galletitas base chocolate y relleno de crema",
+        "code":"503405",
+        "price":"2500",
+        "status":true,
+        "stock": "3",
+        "category":"Alimento"
+    },
+    {
+        "id":"3",
+        "name":"Azucar",
+        "description":"Yerba para mate con palo",
+        "code":"YrbMt",
+        "price":"5500",
+        "status":true,
+        "stock": "16",
+        "category":"Almacen"
+    },
+    {
+        "id":"4",
+        "name":"Fideos Tallarín",
+        "description":"FIDEOS TALLARIN LARGO X 500 GR",
+        "code":"503609",
+        "price":"560",
+        "status":true,
+        "stock": "7",
+        "category":"Almacen"
+    },
+    {
+        "id":"5",
+        "name":"Gaseosa",
+        "description":"Gaseosa Cola Black  1,5 Lt",
+        "code":"410158",
+        "price":"1700",
+        "status":true,
+        "stock": "9",
+        "category":"Bebidas"
+    },
+    {
+        "id":"6",
+        "name":"Queso",
+        "description":"QUESO RALLADO BOLSA 35 GR",
+        "code":"472071",
+        "price":"1400",
+        "status":true,
+        "stock": "2",
+        "category":"Quesos"
+    }
+]
