@@ -3,8 +3,6 @@ const fs = require('fs')
 const app = express()
 const PORT = 8080
 
-
-// Middelwares
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
@@ -14,65 +12,12 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 })
 // ...........................................................................
-/*
-writeFileSync = Escritura de un archivo de manera sincronica
-readFileSync = Lectura de un archivo de manera sincronica
-appendFileSync = Actualizar un archivo de manera sincronica
-unlinkSync = Elimina un archivo de manera sincronica
-mkdirSync = Crear carpetas de manera sincronica
-*/
-
 let products
-
 try {
     products = JSON.parse(fs.readFileSync("products.json", "utf8"))
 } catch (error) {
     console.error('Error al leer los productos');
 }
-
-
-// console.log(products);
-// Mock
-// let products = [{
-//         id: "1",
-//         producto: "Soja"
-//     },
-//     {
-//         id: "2",
-//         producto: "Sevada"
-//     },
-//     {
-//         id: "3",
-//         producto: "Soja"
-//     },
-//     {
-//         id: "4",
-//         producto: "Sevada"
-//     },
-//     {
-//         id: "5",
-//         producto: "Soja"
-//     },
-//     {
-//         id: "6",
-//         producto: "Sevada"
-//     },
-//     {
-//         id: "7",
-//         producto: "Soja"
-//     },
-//     {
-//         id: "8",
-//         producto: "Sevada"
-//     },
-//     {
-//         id: "9",
-//         producto: "Maíz"
-//     }
-// ]
-
-
-
 // ...........................................................................
 // Traer producto por medio de params id
 app.get("/api/products/:pid", (req, res) => {
@@ -215,58 +160,101 @@ app.delete("/api/products/:pid", (req, res) => {
 
 // ...........................................................................
 // Carts
-
-let carts=[
-    {id:1,
-        products: []
-    },
-    {id:2,
-        products: []
-    },
-    {id:3,
-        products: []
-    }
-]
-
+let carts
+try {
+    carts = JSON.parse(fs.readFileSync('carts.json', "utf8"))
+} catch (error) {
+    console.error('No se pudo leer el carrito');
+}
+// ...........................................................................
+// Leer el carrito por id
 app.get("/api/carts/:cid", (req, res) => {
-    const cartID= req.params.cid
-    res.send(carts)
-    console.log(cartID);
+    let cartID = parseInt(req.params.cid)
+    let cart = carts.find(cart => cart.id == cartID)
+    res.send({
+        cart
+    })
 })
 
 
-
+// Leer el carrito 
 app.get("/api/carts", (req, res) => {
-    res.send(carts)
+    let limite = parseInt(req.query.limit)
+    let limiteCart = [...carts]
+    if (!isNaN(limite) && limite > 0) {
+        limiteCart = limiteCart.slice(0, limite)
+    }
+    res.send(limiteCart)
 })
 
 
-// cartsProducts={
-//     id,
-//     ListProducts
-// }
+// Crear un nuevo carrito
+app.post("/api/carts", (req, res) => {
+    const {
+        products
+    } = req.body
 
-app.post("/api/carts", (req,res)=>{
-    res.send({message: 'Posteado'})
+    const {
+        id
+    } = carts.at(-1)
 
-    // const {products} = req.body
 
-    // console.log(products);
+    if (products) {
+        res.send({
+            message: "Producto agregado"
+        })
 
+        const newCart=({
+            id: `${parseInt(id) + 1}`,
+            products
+        })
+
+        const writeNewCart = JSON.stringify([...carts, newCart])
+        try {
+            fs.writeFileSync('carts.json', writeNewCart)
+        } catch (error) {
+            console.error('Error al escribir el producto');
+        }
+        carts.push(newCart)
+    }
+
+})
+
+// Agregar un nuevo producto al carrito especifico
+app.post("/api/:cid/product/:pid", (req, res) => {
+    const cartID = req.params.cid
+    const productID = req.params.pid
+
+    const productAdd = {
+        id: productID,
+        quantity: 1
+    }
+
+
+    const cartIdx = carts.findIndex(cart => cart.id == cartID)
+    const productList = carts[cartIdx].products
+
+    if (cartIdx !== -1) {
+        productList.push(productAdd);
+    }
+
+    const writeNewProductList = JSON.stringify([...productList, productAdd])
+
+    console.log(writeNewProductList);
+
+    console.log(JSON.stringify(carts));
+    try {
+        fs.writeFileSync('carts.json', JSON.stringify(carts))
+    } catch (error) {
+        console.error('Error al escribir el producto');
+    }
+
+
+
+
+    res.send('Producto agregado')
 
 
 })
 
 
-app.post("/api/carts/:cid/product/:pid", (req,res)=>{
-    const productID = req.params.pid 
-
-    const ListProductsFind= products.find((product)=> product.id == productID)
-
-    console.log(ListProductsFind);
-
-    const {products} = req.body
-
-
-
-})
