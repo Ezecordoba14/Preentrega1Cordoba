@@ -1,0 +1,18 @@
+<div>
+    <h1>Hola</h1>
+
+    {{#if product}}
+    <h3>producto: {{product.name}}</h3>
+    <p>precio: ${{product.price}}</p>
+    <p>categoria: {{product.category}}</p>
+
+    {{else}}
+    {{#each limiteProducts}}
+    <h3>producto: {{this.name}}</h3>
+    {{!-- <p>id: {{this.id}}</p> --}}
+    <p>precio: ${{this.price}}</p>
+    <p>categoria: {{this.category}}</p>
+    {{/each}}
+
+    {{/if}}
+</div>

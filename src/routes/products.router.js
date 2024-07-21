@@ -1,10 +1,10 @@
-const express = require("express")
-const router = express.Router()
-const fs = require('fs')
+import { Router } from "express"
+import { readFileSync, writeFileSync } from 'fs'
+const router = Router()
 // ...........................................................................
 let products
 try {
-    products = JSON.parse(fs.readFileSync("products.json", "utf8"))
+    products = JSON.parse(readFileSync("products.json", "utf8"))
 } catch (error) {
     console.error('Error al leer los productos');
 }
@@ -13,7 +13,7 @@ try {
 router.get("/api/products/:pid", (req, res) => {
     let idProduct = req.params.pid
     let product = products.find(product => product.id == idProduct)
-    res.send({
+    res.render('home',{
         product
     })
 })
@@ -27,7 +27,7 @@ router.get("/api/products", (req, res) => {
     if (!isNaN(limite) && limite > 0) {
         limiteProducts = limiteProducts.slice(0, limite)
     }
-    res.send(limiteProducts)
+    res.render('home', {limiteProducts})
 
 })
 
@@ -60,7 +60,7 @@ router.post("/api/products", (req, res) => {
 
     const writeNewProduct = JSON.stringify([...products, newProduct])
     try {
-        fs.writeFileSync('products.json', writeNewProduct)
+        writeFileSync('products.json', writeNewProduct)
     } catch (error) {
         console.error('Error al escribir el producto');
     }
@@ -104,7 +104,7 @@ router.put("/api/products/:pid", (req, res) => {
         products = productsPUT
 
         try {
-            fs.writeFileSync('products.json', JSON.stringify(productsPUT))
+            writeFileSync('products.json', JSON.stringify(productsPUT))
         } catch (error) {
             console.error('Error al actulizar productos');
         }
@@ -135,7 +135,7 @@ router.delete("/api/products/:pid", (req, res) => {
         })
 
         try {
-            fs.writeFileSync('products.json', JSON.stringify(products))
+            writeFileSync('products.json', JSON.stringify(products))
         } catch (error) {
             console.error('No se ha podido borrar el producto');
         }
@@ -148,4 +148,4 @@ router.delete("/api/products/:pid", (req, res) => {
 })
 
 
-module.exports = router
+export default router

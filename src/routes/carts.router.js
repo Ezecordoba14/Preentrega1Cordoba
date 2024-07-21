@@ -1,12 +1,12 @@
-const express = require("express")
+import { Router } from "express"
+import { readFileSync, writeFileSync } from 'fs'
 
-const router = express.Router()
-const fs = require('fs')
+const router = Router()
 
 // ...........................................................................
 let carts
 try {
-    carts = JSON.parse(fs.readFileSync('carts.json', "utf8"))
+    carts = JSON.parse(readFileSync('carts.json', "utf8"))
 } catch (error) {
     console.error('No se pudo leer el carrito');
 }
@@ -55,7 +55,7 @@ router.post("/api/carts", (req, res) => {
 
         const writeNewCart = JSON.stringify([...carts, newCart])
         try {
-            fs.writeFileSync('carts.json', writeNewCart)
+            writeFileSync('carts.json', writeNewCart)
         } catch (error) {
             console.error('Error al escribir el producto');
         }
@@ -86,7 +86,7 @@ router.post("/api/:cid/product/:pid", (req, res) => {
 
 
     try {
-        fs.writeFileSync('carts.json', JSON.stringify(carts))
+        writeFileSync('carts.json', JSON.stringify(carts))
     } catch (error) {
         console.error('Error al escribir el producto');
     }
@@ -100,4 +100,4 @@ router.post("/api/:cid/product/:pid", (req, res) => {
 })
 
 
-module.exports = router
+export default router
