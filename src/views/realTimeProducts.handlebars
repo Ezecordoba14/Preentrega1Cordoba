@@ -1,0 +1,54 @@
+<h1>Productos Actualizados</h1>
+<div>
+    <h2>Crear producto</h2>
+    <form action="">
+        <label for="name">
+            Nombre del producto
+        </label>
+        <input type="text" name="name" id="nameProduct"  />
+        <label for="id">
+            Id del producto
+        </label>
+        <input type="number" name="id" id="idProduct"  />
+
+        <label for="descript">Descripcion del producto
+        </label>
+        <input type="text" name="descript" id="descriptProduct" />
+
+        <label for="code">Codigo
+        </label>
+        <input type="text" name="code" id="codeProduct" />
+
+        <label for="price">Precio
+        </label>
+        <input type="text" name="price" id="priceProduct" />
+
+        <label for="stock">Cantidad de stock
+        </label>
+        <input type="text" name="stock" id="stockProduct" />
+
+        <label for="category">Categoria
+        </label>
+        <input type="text" name="category" id="categoryProduct" />
+
+        <button type="submit" id="newProduct">Crear nuevo producto</button>
+        
+    </form>
+</div>
+
+<div>
+    <h3>Lista de Productos</h3>
+    <div id="productsLogs">
+
+    </div>
+
+    {{!-- {{#each limiteProducts}}
+    <h3>producto: {{this.name}}</h3>
+    <p>id: {{this.id}}</p>
+    <p>precio: ${{this.price}}</p>
+    <p>categoria: {{this.category}}</p>
+    {{/each}} --}}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

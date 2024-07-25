@@ -1,8 +1,10 @@
 import { Router } from "express"
 import { readFileSync, writeFileSync } from 'fs'
+
+
 const router = Router()
 // ...........................................................................
-let products
+export let products
 try {
     products = JSON.parse(readFileSync("products.json", "utf8"))
 } catch (error) {
@@ -47,6 +49,7 @@ router.post("/api/products", (req, res) => {
         id
     } = products.at(-1)
 
+
     const newProduct = {
         id: `${parseInt(id) + 1}`,
         name: name,
@@ -58,6 +61,7 @@ router.post("/api/products", (req, res) => {
         category: category || ""
     }
 
+
     const writeNewProduct = JSON.stringify([...products, newProduct])
     try {
         writeFileSync('products.json', writeNewProduct)
@@ -67,6 +71,8 @@ router.post("/api/products", (req, res) => {
 
     products.push(newProduct)
     res.send(newProduct);
+
+
 
 })
 
