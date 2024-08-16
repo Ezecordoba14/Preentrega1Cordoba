@@ -19,21 +19,12 @@ const router = Router()
 // Leer el carrito 
 router.get("/api/carts", async (req, res) => {
     let limite = parseInt(req.query.limit)
-    // let limiteCart = [...carts]
-    // if (!isNaN(limite) && limite > 0) {
-    //     limiteCart = limiteCart.slice(0, limite)
-    // }
     let carts = await cartModel.find({}).lean()
     if (limite) {
         carts = await cartModel.find({}).limit(limite).lean()
     }
 
-
-
     res.render('carts', { carts })
-    // console.log({carts});
-
-
 
 })
 

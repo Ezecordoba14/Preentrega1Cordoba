@@ -12,7 +12,6 @@ router.get("/api/products/:pid", async (req, res) => {
         let idProduct = req.params.pid;
         let product = await productModel.findOne({ _id: idProduct, }).lean();
         res.render("home", { product });
-        // console.log(product);
     } catch (error) {
         console.error({
             message: "Error al encontrar el producto",
@@ -84,7 +83,6 @@ router.get("/api/products", async (req, res) => {
         res.render("home", { products, filterCategory, categoryString });
     } catch (error) {
         console.error({ message: "Error al encontrar los productos", });
-        // res.status(500).json({ status: 'error', msg: error.message });
     }
 
 
