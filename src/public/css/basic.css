@@ -1,0 +1,62 @@
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divBtnCart{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.bodyHome{
+    display: flex;
+    justify-content: space-around;
+}
+
+.contentFilter {
+    display: flex;
+    flex-direction: column;
+    padding-right: 90px;
+}
+
+.contentProducts {
+    margin-right: 100px;
+    display: grid; 
+    grid-template-columns: auto auto auto;
+    gap: 50px   ;
+}
+.content{
+    display: flex;
+}
+.arrows{
+    display: flex;
+    
+    justify-content: flex-end;
+}
+.detailProd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.contentCarts{
+    display: grid; 
+    grid-template-columns: auto auto auto;
+    gap: 50px   ;
+}
+
+.btnNC{
+    display: flex;
+    justify-content: center;
+}
+.divBtnUse{
+    display: flex;
+    justify-content: space-around;
+}
+.contentPedido{
+    justify-self: center;
+}
+.spanEmptyCart{
+    display: flex;
+    justify-content: center;
+}

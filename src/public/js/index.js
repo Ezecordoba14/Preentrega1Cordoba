@@ -11,6 +11,7 @@ const productsLogs = document.getElementById('productsLogs')
 
 
 
+
 btnNewProduct.addEventListener('click', (e) => {
     e.preventDefault()
     

@@ -14,6 +14,10 @@
     "express": "^4.19.2",
     "express-handlebars": "^7.1.3",
     "filesystem": "^1.0.1",
-    "socket.io": "^4.7.5"
+    "mongoose": "^8.5.1",
+    "mongoose-paginate-v2": "^1.8.3",
+    "socket.io": "^4.7.5",
+    "sweetalert2": "^11.12.4",
+    "toastify-js": "^1.12.0"
   }
 }

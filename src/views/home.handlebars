@@ -1,18 +1,107 @@
-<div>
-    <h1>Hola</h1>
+<h1>Hola</h1>
 
+<div class="divBtnCart">
+    <button>
+        <a href="http://localhost:8080/api/carts">Carrito</a>
+    </button>
+</div>
+<div class="detailProd">
     {{#if product}}
+    <button>
+        <a href="http://localhost:8080/api/products">inicio</a>
+    </button>
     <h3>producto: {{product.name}}</h3>
-    <p>precio: ${{product.price}}</p>
     <p>categoria: {{product.category}}</p>
+    <p>Descripción: {{product.description}}</p>
+    <p>precio: ${{product.price}}</p>
+    <div>
+        <label for="btnCart">Cantidades</label>
+        <input type="number" max="{{product.stock}}" min="1" name="quantity" value="1" id="quantity{{product._id}}">
+        <button class="btnCart" productId="{{product._id}}">
+            Agregar al carrito
+        </button>
+    </div>
+</div>
+{{else}}
+<div class="bodyHome">
+    <div class="contentFilter">
+        <div>
+            <h4>Categorías</h4>
+            <ul>
+                <li>
+                    <a href="http://localhost:8080/api/products">Todos</a>
+                </li>
+                {{#each filterCategory}}
+                <li>
+                    <a href="http://localhost:8080/api/products?category={{this._id}}">
+                        {{this._id}}
+                    </a>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        <div>
+            <h4>Ordernar por</h4>
+            <ul>
+                <li><a
+                        href="http://localhost:8080/api/products?page={{products.page}}&limit={{products.limit}}&sort=nameAsc{{categoryString}}">Nombre
+                        Ascendente</a></li>
+                <li><a
+                        href="http://localhost:8080/api/products?page={{products.page}}&limit={{products.limit}}&sort=nameDesc{{categoryString}}">Nombre
+                        Descendente</a></li>
+                <li><a
+                        href="http://localhost:8080/api/products?page={{products.page}}&limit={{products.limit}}&sort=priceAsc{{categoryString}}">Precio
+                        Ascendente</a></li>
+                <li><a
+                        href="http://localhost:8080/api/products?page={{products.page}}&limit={{products.limit}}&sort=priceDesc{{categoryString}}">Precio
+                        Descendente</a></li>
+            </ul>
 
-    {{else}}
-    {{#each limiteProducts}}
-    <h3>producto: {{this.name}}</h3>
-    {{!-- <p>id: {{this.id}}</p> --}}
-    <p>precio: ${{this.price}}</p>
-    <p>categoria: {{this.category}}</p>
-    {{/each}}
+        </div>
+    </div>
+    <div class="content">
+        <div class="contentProducts">
+            {{#each products.docs}}
+            <div class="contentProd">
+                <h3>producto: {{this.name}}</h3>
+                <p>id: {{this._id}}</p>
+                <p>precio: ${{this.price}}</p>
+                <p>categoria: {{this.category}}</p>
+                <div>
+                    <label for="btnCart">Cantidades</label>
+                    <input type="number" max="{{this.stock}}" min="1" name="quantity" value="1"
+                        id="quantity{{this._id}}">
+                    <button class="btnCart" productId="{{this._id}}">
+                        Agregar al carrito
+                    </button>
+                    <div class="cartSelect" productId="{{this._id}}">
+                    </div>
+                </div>
+                <button>
+                    <a href="http://localhost:8080/api/products/{{this._id}}">Detalle del producto</a>
+                </button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
 
     {{/if}}
+
 </div>
+
+
+<div class="arrows">
+    {{#if products.hasPrevPage}}
+    <a href={{products.prevLink}}>
+        << Anterior</a>
+            {{/if}}
+            &nbsp;
+            {{products.page}}
+            &nbsp;
+            {{#if products.hasNextPage}}
+            <a href={{products.nextLink}}>Siguiente >></a>
+            {{/if}}
+</div>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="module" src="/js/Home&Carts.js"></script>

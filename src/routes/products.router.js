@@ -1,157 +1,152 @@
-import { Router } from "express"
-import { readFileSync, writeFileSync } from 'fs'
+import { Router } from "express";
+import { readFileSync, writeFileSync } from "fs";
+import productModel from "../models/product.model.js";
 
+const router = Router();
 
-const router = Router()
-// ...........................................................................
-export let products
-try {
-    products = JSON.parse(readFileSync("products.json", "utf8"))
-} catch (error) {
-    console.error('Error al leer los productos');
-}
 // ...........................................................................
 // Traer producto por medio de params id
-router.get("/api/products/:pid", (req, res) => {
-    let idProduct = req.params.pid
-    let product = products.find(product => product.id == idProduct)
-    res.render('home',{
-        product
-    })
-})
+router.get("/api/products/:pid", async (req, res) => {
+    try {
 
+        let idProduct = req.params.pid;
+        let product = await productModel.findOne({ _id: idProduct, }).lean();
+        res.render("home", { product });
+        // console.log(product);
+    } catch (error) {
+        console.error({
+            message: "Error al encontrar el producto",
+        });
+    }
+});
 
 // Traer todos los productos
-router.get("/api/products", (req, res) => {
-    let limite = parseInt(req.query.limit)
-    let limiteProducts = [...products]
+router.get("/api/products", async (req, res) => {
+    try {
+        // AVISO!!! el query params que se debería llamar "query" decidí llamarlo "category" por facilidad y simplicidad
+        const { page = 1, sort, limit = 10, category } = req.query
 
-    if (!isNaN(limite) && limite > 0) {
-        limiteProducts = limiteProducts.slice(0, limite)
+        let filter = {}
+        category == undefined ? filter = {} : filter = { category: `${category}` }
+
+        // Filtro
+        let filterCategory = await productModel.aggregate([
+            { $group: { _id: "$category", }, },
+            { $sort: { _id: 1, }, },
+        ]);
+
+        let sortParams
+        if (sort == 'nameAsc') {
+            sortParams = { name: 1 }
+        } else if (sort == 'nameDesc') {
+            sortParams = { name: -1 }
+        } else if (sort == 'priceAsc') {
+            sortParams = { price: 1 }
+        } else if (sort == 'priceDesc') {
+            sortParams = { price: -1 }
+        }
+
+        let options = {
+            page: parseInt(page),
+            limit: parseInt(limit, 10),
+            sort: sort ? sortParams : {},
+            lean: true
+        }
+
+
+        let products = await productModel.paginate(filter, options);
+
+        let categoryString
+        category ? categoryString = `&category=${category}` : categoryString = ""
+
+
+
+        products.prevLink = products.hasPrevPage ? `http://localhost:8080/api/products?page=${products.prevPage}&limit=${limit}&sort=${sort}${categoryString}` : "";
+        products.nextLink = products.hasNextPage ? `http://localhost:8080/api/products?page=${products.nextPage}&limit=${limit}&sort=${sort}${categoryString}` : "";
+        products.isValid = !(page <= 0 || page > products.totalPages);
+
+
+        // res.status(200).json({
+        //     status: 'success',
+        //     payload: products.docs,
+        //     totalPages: products.totalPages,
+        //     prevPage: products.prevPage,
+        //     nextPage: products.nextPage,
+        //     page: products.page,
+        //     hasPrevPage: products.hasPrevPage,
+        //     hasNextPage: products.hasNextPage,
+        //     prevLink: products.hasPrevPage ? `/api/products?page=${products.prevPage}&limit=${limit}&sort=${sort}${categoryString}` : null,
+        //     nextLink: products.hasNextPage ? `/api/products?page=${products.nextPage}&limit=${limit}&sort=${sort}${categoryString}` : null
+        // })
+
+
+
+        res.render("home", { products, filterCategory, categoryString });
+    } catch (error) {
+        console.error({ message: "Error al encontrar los productos", });
+        // res.status(500).json({ status: 'error', msg: error.message });
     }
-    res.render('home', {limiteProducts})
 
-})
+
+});
 
 
 // Crear un nuevo producto
-router.post("/api/products", (req, res) => {
-    const {
-        name,
-        description,
-        code,
-        price,
-        stock,
-        category
-    } = req.body
 
-    const {
-        id
-    } = products.at(-1)
+router.post('/api/products', async (req, res) => {
+    const { name, description, code, price, status, stock, category } = req.body;
 
-
-    const newProduct = {
-        id: `${parseInt(id) + 1}`,
-        name: name,
-        description: description || "",
-        code: code || "",
-        price: price || "",
-        status: true,
-        stock: stock || "",
-        category: category || ""
+    if ((name == undefined) || (description == undefined) || (code == undefined) || (price == undefined) || (category == undefined)) {
+        return res.status(400).json({
+            msg: "Error, campo/s vacios",
+        });
     }
 
+    const newProduct = new productModel({
+        name, description, code, price, status: status ?? true, stock, category
+    });
 
-    const writeNewProduct = JSON.stringify([...products, newProduct])
     try {
-        writeFileSync('products.json', writeNewProduct)
+        const saveNewProduct = await newProduct.save()
+        res.status(200).json(saveNewProduct)
     } catch (error) {
-        console.error('Error al escribir el producto');
+        res.status(500).json({ msg: error.message });
     }
-
-    products.push(newProduct)
-    res.send(newProduct);
-
-
-
 })
-
 
 // Actulizar alguna propiedad de un product
-router.put("/api/products/:pid", (req, res) => {
-    let idProduct = parseInt(req.params.pid)
-    let productPUT = products.find(product => product.id == idProduct)
+router.put("/api/products/:pid", async (req, res) => {
+    let idProduct = req.params.pid;
+    const filter = { _id: idProduct };
+    const update = req.body;
 
-    if (productPUT) {
-        const {
-            name,
-            description,
-            code,
-            price,
-            stock,
-            category
-        } = req.body
-
-
-        let productsPUT = products.map((product) => {
-            if (product.id == productPUT.id) {
-                return {
-                    ...productPUT,
-                    name: name || productPUT.name,
-                    description: description || productPUT.description,
-                    code: code || productPUT.code,
-                    price: price || productPUT.price,
-                    stock: stock || productPUT.stock,
-                    category: category || productPUT.category
-                }
-            }
-            return product
-        })
-        products = productsPUT
-
-        try {
-            writeFileSync('products.json', JSON.stringify(productsPUT))
-        } catch (error) {
-            console.error('Error al actulizar productos');
-        }
-
-
+    try {
+        const productUpdate = await productModel.findByIdAndUpdate(filter, update, { new: true })
         res.json({
-            message: `Actualizado producto id= ${productPUT.id}`
+            message: `Actualizado producto ${productUpdate}`,
         })
-
-
-
-    } else {
+    } catch (error) {
         res.status(404).json({
-            message: "Producto no encontrado"
-        })
+            message: "Producto no encontrado o error al actualizar",
+        });
     }
 
-})
-
+});
 
 // Borrar un producto por medio de su id
-router.delete("/api/products/:pid", (req, res) => {
-    let idProduct = parseInt(req.params.pid)
-    if (idProduct) {
-        products = products.filter((product) => product.id != idProduct)
+router.delete("/api/products/:pid", async (req, res) => {
+    const idProduct = req.params.pid
+    try {
+        const productDelete = await productModel.findByIdAndDelete(idProduct)
         res.json({
-            message: `Producto con id ${idProduct} eliminado`
+            message: `Producto eliminado nombre:${productDelete.name}, id: ${idProduct}`,
         })
-
-        try {
-            writeFileSync('products.json', JSON.stringify(products))
-        } catch (error) {
-            console.error('No se ha podido borrar el producto');
-        }
-
-    } else {
+    } catch (error) {
         res.status(404).json({
-            message: "Producto no encontrado"
-        })
+            message: "Producto no encontrado",
+        });
     }
-})
 
+});
 
-export default router
+export default router;
