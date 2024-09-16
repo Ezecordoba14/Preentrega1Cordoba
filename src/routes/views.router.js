@@ -1,4 +1,5 @@
 import express from 'express'
+import { isAuthenticated, isNotAuthenticated } from '../middleware/auth.js';
 // import { socketServer } from '../app.js'
 
 import { readFileSync } from 'fs'
@@ -14,11 +15,20 @@ try {
 
 router.get('/api/realtimeproducts', (req, res) => {
     res.render('realTimeProducts')
-    
-    
+  
 })
 
-// socketServer.emit("productLogs", products)
+router.get('/login', isNotAuthenticated, (req, res) => {
+    res.render('login');
+});
+
+router.get('/register', isNotAuthenticated, (req, res) => {
+    res.render('register');
+});
+
+router.get('/profile', isAuthenticated, (req, res) => {
+    res.render('profile', { user: req.session.user });
+});
 
 
 export default router
