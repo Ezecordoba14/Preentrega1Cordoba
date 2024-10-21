@@ -1,31 +1,18 @@
 <h1>Hola</h1>
 
 <div class="divBtnCart">
-    <button>
-        <a href="http://localhost:8080/api/carts">Carrito</a>
+    <button id="cart">
+        {{!-- <a href="http://localhost:8080/api/carts">Carrito</a> --}}
+        Carrito
     </button>
     <button>
         <a href="http://localhost:8080/login">Perfil</a>
     </button>
-</div>
-<div class="detailProd">
-    {{#if product}}
-    <button>
-        <a href="http://localhost:8080/api/products">inicio</a>
+    <button id="btnAdmin">
+        <a href="http://localhost:8080/api/createproduct">admin</a>
     </button>
-    <h3>producto: {{product.name}}</h3>
-    <p>categoria: {{product.category}}</p>
-    <p>Descripción: {{product.description}}</p>
-    <p>precio: ${{product.price}}</p>
-    <div>
-        <label for="btnCart">Cantidades</label>
-        <input type="number" max="{{product.stock}}" min="1" name="quantity" value="1" id="quantity{{product._id}}">
-        <button class="btnCart" productId="{{product._id}}">
-            Agregar al carrito
-        </button>
-    </div>
 </div>
-{{else}}
+
 <div class="bodyHome">
     <div class="contentFilter">
         <div>
@@ -66,30 +53,31 @@
         <div class="contentProducts">
             {{#each products.docs}}
             <div class="contentProd">
-                <h3>producto: {{this.name}}</h3>
-                <p>id: {{this._id}}</p>
-                <p>precio: ${{this.price}}</p>
-                <p>categoria: {{this.category}}</p>
-                <div>
-                    <label for="btnCart">Cantidades</label>
-                    <input type="number" max="{{this.stock}}" min="1" name="quantity" value="1"
-                        id="quantity{{this._id}}">
-                    <button class="btnCart" productId="{{this._id}}">
-                        Agregar al carrito
-                    </button>
+                <button class="btnDeleteProduct" prodID="{{this._id}}">X</button>
+                <h3>{{this.name}}</h3>
+                <p>{{this.description}}</p>
+                <div class="divPricCat">
+                    <p class="cat"> {{this.category}}</p>
+                    <p class="price"> ${{this.price}}</p>
+                </div>
+                <div class="divBtnsCart">
+                    <div class="divIpBtn">
+                        <input type="number" max="{{this.stock}}" min="1" name="quantity" value="1"
+                            id="quantity{{this._id}}">
+                        <button class="btnCart" productId="{{this._id}}">
+                            Agregar al carrito
+                        </button>
+                    </div>
                     <div class="cartSelect" productId="{{this._id}}">
                     </div>
-                </div>
                 <button>
                     <a href="http://localhost:8080/api/products/{{this._id}}">Detalle del producto</a>
                 </button>
+                </div>
             </div>
             {{/each}}
         </div>
     </div>
-
-
-    {{/if}}
 
 </div>
 
@@ -107,4 +95,5 @@
             {{/if}}
 </div>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="/js/Home&Carts.js"></script>

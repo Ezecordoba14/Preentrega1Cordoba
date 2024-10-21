@@ -11,17 +11,26 @@
     <button>
         <a href="http://localhost:8080/api/products">inicio</a>
     </button>
+
+    <h1>Carrito y pedidos</h1>
+    <div id="noCartDiv" style="display: flex; justify-content: center">
+        <h2>No tienes ningun pedido abierto, vamos a crear uno!</h2>
+    </div>
+    <div class="btnNC">
+        <button id="btnNewCart">Nuevo pedido</button>
+    </div>
+
+
+
     {{#if carts}}
     <div>
-        <h1>Carrito y pedidos</h1>
         <div class="contentCarts">
             {{#each carts}}
             <div class="contentPedido">
-                <h2>Pedido N°: </h2>
-                <p>
-                    id:
+                <h2>Pedido N°:
                     <a href="http://localhost:8080/api/carts/{{this._id}}">{{this._id}}</a>
-                </p>
+                </h2>
+
                 <div class="divBtnUse">
                     <button class="btnUse" cart-id="{{this._id}}">Usar</button>
                     <button class="btnDeleteCart" cart-id="{{this._id}}">X</button>
@@ -29,29 +38,6 @@
             </div>
             {{/each}}
         </div>
-        <div class="btnNC">
-            <button id="btnNewCart">Nuevo pedido</button>
-        </div>
-    </div>
-    {{/if}}
-
-
-    {{#if cart}}
-    <button><a href="http://localhost:8080/api/carts">Volver</a></button>
-    <h1 id="nPedido" pedido-id="{{cartID}}">Pedido N° {{cartID}}</h1>
-    <div class="spanEmptyCart"> 
-        <button id="emptyCart"> Vaciar carrito</button>
-    </div>
-    <div class="contentCarts">
-        {{#each cart.products}}
-        <div>
-            <h2>Producto: {{this.product.name}}</h2>
-            <p>id: {{this.product._id}}</p>
-            <p> Precio: {{this.product.price}}</p>
-            <p>cantidad: {{this.quantity}}</p>
-            <button class="btnDeleteProd" product-id="{{this.product._id}}">X</button>
-        </div>
-        {{/each}}
     </div>
     {{/if}}
 </body>
@@ -59,6 +45,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script type="module" src="/js/Home&Carts.js"></script>
 <script type="module" src="/js/cart.js"></script>
+
 
 
 </html>

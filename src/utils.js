@@ -3,6 +3,9 @@ import { dirname } from 'path'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
+import dotenvConfig from './config/dotenv.config.js'
+import nodemailer from 'nodemailer'
+import { v4 } from 'uuid'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -12,7 +15,7 @@ export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSy
 
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password)
 
-export const PRIVATE_KEY = 'EzeKeySecret'
+export const PRIVATE_KEY = `${dotenvConfig.privateKey}`
 
 export const generateToken = (user) => {
     const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '24h' })
@@ -50,8 +53,6 @@ export const authorization = (role) => {
 
 
 
-export default __dirname
-
 
 export async function getData() {
     const response = await fetch('http://localhost:8080/api/carts')
@@ -59,4 +60,17 @@ export async function getData() {
     
 }
 
+export const transport = nodemailer.createTransport({
+    service: 'gmail',
+    port: 587,
+    auth: {
+        user: `${dotenvConfig.USER_NODEMAILER}`,
+        pass: `${dotenvConfig.PASS_NODEMAILER}`
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+})
+export const numberTicket = v4()
 
+export default __dirname

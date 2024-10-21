@@ -1,0 +1,49 @@
+    <button><a href="http://localhost:8080/api/products"><I></I>Inicio</a></button>
+        <button id="ChangeCart"> 
+            <a href="http://localhost:8080/api/carts">Cambiar pedido</a>
+        </button>
+
+    <h1 id="nPedido" pedido-id="{{cartID}}">Pedido N° {{cartID}}</h1>
+    <div class="spanEmptyCart">
+        <button id="emptyCart"> Vaciar carrito</button>
+    </div>
+    <div class="spanChangeCart">
+    </div>
+    <div class="purchase">
+        <div id="cartEmptyTrue">
+            <h2> Carrito vacio!</h2>
+            <p>¿Qué esperas para agregar un producto?</p>
+            <button>
+                <a href="http://localhost:8080/api/products">Ver productos</a>
+            </button>
+        </div>
+
+    </div>
+    <div class="contentCarts">
+        {{#each cart.products}}
+        <div class="cardCart">
+            <h3>{{this.product.name}}</h3>
+            <p>{{this.product.description}}</p>
+            <div class="divPricCat">
+            <p class="cat">cantidad: {{this.quantity}}</p>
+            <p> Precio unit: {{this.product.price}}</p>
+            </div>
+            <button class="btnDeleteProd" product-id="{{this.product._id}}">X</button>
+        </div>
+        <div>
+        </div>
+        {{/each}}
+    </div>
+        {{#if lengthCart}}
+            <h4 class="totalPrice">Total: ${{totalPrice}}</h4>
+        {{/if}}
+            <div id="cartEmptyFalse">
+            <button id="btnPurchase">
+                <a href="http://localhost:8080/api/{{cartID}}/purchase">Terminar compra</a>
+            </button>
+        </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="module" src="/js/Home&Carts.js"></script>
+<script type="module" src="/js/cart.js"></script>

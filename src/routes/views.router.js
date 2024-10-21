@@ -1,20 +1,11 @@
 import express from 'express'
-import { isAuthenticated, isNotAuthenticated } from '../middleware/auth.js';
-// import { socketServer } from '../app.js'
-
-import { readFileSync } from 'fs'
+import { isAuthenticated, isNotAuthenticated, roleAdmin } from '../middleware/auth.js';
 
 const router = express.Router()
 
-let products
-try {
-    products = JSON.parse(readFileSync("products.json", "utf8"))
-} catch (error) {
-    console.error('Error al leer los productos');
-}
 
-router.get('/api/realtimeproducts', (req, res) => {
-    res.render('realTimeProducts')
+router.get('/api/createproduct',roleAdmin, (req, res) => {
+    res.render('createProduct')
   
 })
 
@@ -28,7 +19,10 @@ router.get('/register', isNotAuthenticated, (req, res) => {
 
 router.get('/profile', isAuthenticated, (req, res) => {
     res.render('profile', { user: req.session.user });
+    
 });
-
+router.get('/postPurchase',(req,res)=>{
+    res.render('postPurchase')
+})
 
 export default router

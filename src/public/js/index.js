@@ -9,6 +9,21 @@ const txtCategory = document.getElementById('categoryProduct')
 const btnNewProduct = document.getElementById('newProduct')
 const productsLogs = document.getElementById('productsLogs')
 
+const cookies = document.cookie.split(';')
+let rol = cookies.find((ck) => {
+    const ck1 = ck.startsWith('rol')
+    if (!ck1) {
+        const ck2 = ck.startsWith(' rol')
+        return ck2
+    }
+})
+if (rol != undefined) {
+    rol = rol.split('=')[1]
+}
+
+if (rol && rol != 'admin' || !rol) {
+    btnNewProduct.setAttribute("disabled", "")
+}
 
 
 
@@ -21,7 +36,6 @@ btnNewProduct.addEventListener('click', (e) => {
         description: txtDescript.value,
         code: txtCode.value,
         price: txtPrice.value,
-        status: true,
         stock: txtStock.value,
         category: txtCategory.value
     }
@@ -34,7 +48,25 @@ btnNewProduct.addEventListener('click', (e) => {
             "Content-Type": "application/json",
             },
     })
-    .then((resp)=>socket.emit('message', resp))
+    .then((resp)=>{
+        if (resp.ok) {
+            Toastify({
+                text: "Producto creado",
+                duration: 3000,
+            }).showToast();
+            setTimeout(() => {
+                location.reload()
+            }, 500);
+        }else{
+            Toastify({
+                text: "No se ha podido crear",
+                duration: 3000,
+                style: {
+                    background: "linear-gradient(to right, #741032, #e71e1e)",
+                }
+            }).showToast();
+        }
+    })
     .catch((error) => console.error("Errorrrr:", error))
 })
 

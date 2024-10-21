@@ -1,0 +1,21 @@
+<button>
+    <a href="http://localhost:8080/api/products">inicio</a>
+</button>
+<button class="btnDeleteProduct" prodID="{{product._id}}">X</button>
+<div class="detailProd">
+<h3>{{product.name}}</h3>
+<p>categoria: {{product.category}}</p>
+<p>Descripción: {{product.description}}</p>
+<p>precio: ${{product.price}}</p>
+<div>
+    <label for="btnCart">Cantidades</label>
+    <input type="number" max="{{product.stock}}" min="1" name="quantity" value="1" id="quantity{{product._id}}">
+    <button class="btnCart" productId="{{product._id}}">
+        Agregar al carrito
+    </button>
+</div>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="/js/Home&Carts.js"></script>

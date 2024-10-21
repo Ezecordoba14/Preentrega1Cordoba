@@ -1,7 +1,5 @@
 import express from 'express'
-import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
-import {Server} from 'socket.io'
 import productsRouter from "./routes/products.router.js"
 import cartsRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/views.router.js"
@@ -14,11 +12,12 @@ import passport from 'passport';
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser';
 import { environment } from './config/database.js';
+import dotenvConfig from './config/dotenv.config.js'
 
 
 
 const app = express()
-const PORT = 8080
+const PORT = dotenvConfig.port
 
 // app.use(express.json())
 app.use(express.urlencoded({
@@ -35,8 +34,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(session({
-    store: MongoStore.create({ mongoUrl: 'mongodb+srv://EzeCordoba:Franco140@cluster0.9jzufs6.mongodb.net/user?retryWrites=true&w=majority&appName=Cluster0' }),
-    secret: 'secretkey',
+    store: MongoStore.create({ mongoUrl: `${dotenvConfig.mongoUrl}` }),
+    secret: `${dotenvConfig.secretKey}`,
     resave: false,
     saveUninitialized: true
 }));
@@ -64,25 +63,6 @@ environment()
 
 const httpServer = app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
-const socketServer = new Server(httpServer)
 
-
-
-
-
-
-socketServer.on('connection', socket => {
-    console.log("Nuevo cliente conectado")
-
-    socketServer.emit("productLogs", products)
-    socket.on('message', () => {
-        socketServer.emit("productLogs", products)
-    })
-
-    socket.on("delete", () => {
-        socketServer.emit("productLogs", products)
-    })
-
-})
 
 

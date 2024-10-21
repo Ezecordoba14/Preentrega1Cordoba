@@ -1,11 +1,13 @@
-<h2>Perfil de Usuario</h2>
-    <button>
-        <a href="http://localhost:8080/api/products">inicio</a>
-    </button>
-<p>Nombre: {{user.first_name}}</p>
-<p>Apellido: {{user.last_name}}</p>
-<p>Email: {{user.email}}</p>
-<p>Edad: {{user.age}}</p>
-<form action="/api/sessions/logout" method="POST">
-    <button type="submit">Cerrar Sesión</button>
-</form>
+<button>
+    <a href="http://localhost:8080/api/products">Inicio</a>
+</button>
+    <h1>Perfil de Usuario</h1>
+<div class="perfile">
+    <p>Nombre: {{user.first_name}}</p>
+    <p>Apellido: {{user.last_name}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Edad: {{user.age}}</p>
+    <form action="/api/sessions/logout" method="POST">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+</div>

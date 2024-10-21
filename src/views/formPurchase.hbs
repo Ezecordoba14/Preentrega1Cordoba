@@ -1,0 +1,36 @@
+<h1>
+    Ultimos pasos ...
+</h1>
+
+<button>
+    <a href="http://localhost:8080/api/carts/{{cartID}}">
+        Atrás
+    </a>
+</button>
+
+<div "container">
+
+    <h3>
+        Contacto
+    </h3>
+    <form method="post" action="http://localhost:8080/api/{{cartID}}/purchase">
+        <input type="email" name="email" id="email" required>
+        {{!-- <input type="email" name="mailContact" id="mailContact"> --}}
+        <button type="submit" id="btnPurchase" pedidoID="{{cartID}}"> Terminar Compra</button>
+    </form>
+
+    <h3>
+        Pedido:
+    </h3>
+    {{#each cart.products}}
+    <div>
+        <h2>{{this.product.name}}</h2>
+        <p> Precio: {{this.product.price}}</p>
+        <p>cantidad: {{this.quantity}}</p>
+    </div>
+    {{/each}}
+    <h4>
+        Total: $ {{totalPrice}}
+    </h4>
+</div>
+<script type="module" src="/js/purchase.js"></script>
